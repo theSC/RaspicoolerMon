@@ -16,7 +16,8 @@ This project is being created to monitor coolers remotely in professional kitche
 ##Setup:##
 Open raspicoolermon.py in your favorite text editor and change the directory for the coolermon.log and RSS feed
 
-###The wiring for the LCD is as follows:###
+##Wiring:##
+###LCD###
 ```
 1 : GND
 2 : 5V
@@ -34,6 +35,8 @@ Open raspicoolermon.py in your favorite text editor and change the directory for
 14: Data Bit 7
 15: LCD Backlight +5V**
 16: LCD Backlight GND
-
+```
+###Reed switch###
+```
 Reed switch: Pin 17 (Pulled up)
 ```
