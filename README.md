@@ -3,18 +3,20 @@
 This project is being created to monitor coolers remotely in professional kitches using Arduino Minis and a Rasberry Pi.
 
 ##Features:##
-- Outside weather
-- RSS feed display (Feed title and top three headlines)
+- 16x2 LCD Display on Raspberry Pi diplays 
+  - Outside weather
+  - RSS feed display (Feed title and top three headlines)
+  - Cooler tempuratures and humidty using DHT22s (WIP)
+  - Kitchen tempurature and humidty using DHT22s (WIP)
 - Wireless communication between Arduinos and Raspberry Pi using NRF24L01s (WIP)
-- Cooler tempuratures and humidty using DHT22s (WIP)
-- Kitchen tempuarte and humidty using DHT22s (WIP)
 - .csv logging (WIP)
 - MySQL logging (WIP)
 - Pushbullet notifications (WIP)
 - Live website HUD (WIP)
 
 ##Setup:##
-Open raspicoolermon.py in your favorite text editor and change the directory for the coolermon.log and RSS feed
+- Create directory for log.  Make sure it is writable by the user that will run RaspicoolerMon.
+- Open raspicoolermon.py in your favorite text editor and change the directory for the coolermon.log and RSS feed
 
 ##Wiring:##
 ###LCD###
