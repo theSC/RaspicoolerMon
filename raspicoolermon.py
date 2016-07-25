@@ -10,6 +10,7 @@ import logging
 import feedparser
 import subprocess
 from picamera import PiCamera
+from ConfigParser import SafeConfigParser
 
 #####################
 #BEGIN USER SETTINGS
@@ -23,14 +24,16 @@ rssenable = 1 # 1 for enabled 0 for disabled
 weatherenable = 1 # 1 for enabled 0 for disabled
 #END OF USER SETTINGS
 #####################
-
+parser = SafeConfigParser()
+parser.read('raspicoolermon.ini')
+print parser.get('user_settings', 'location')
 # Define camera
 camera = PiCamera()
 
 # Define reed switch
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    
+
 # Define GPIO to LCD mapping
 LCD_RS = 7
 LCD_E  = 8
@@ -56,7 +59,7 @@ logger = logging.getLogger('raspicoolermon')
 hdlr = logging.FileHandler('logs/raspicoolermon.log')
 formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 hdlr.setFormatter(formatter)
-logger.addHandler(hdlr) 
+logger.addHandler(hdlr)
 logger.setLevel(logging.INFO)
 
 #Reed switch interupt
@@ -83,7 +86,7 @@ def main():
   GPIO.setup(LCD_D7, GPIO.OUT) # DB7
 
   ip = ni.ifaddresses('wlan0')[2][0]['addr']
-  
+
   # Initialise display
   lcd_init()
   lcd_string("Welcome to ",LCD_LINE_1)
@@ -127,7 +130,7 @@ def main():
       ctemp = re.search(r"(?<='temp': ).*?(?=, 'temp_min)", '%s' % ct).group(0)
       sunset = w.get_sunset_time('iso')
       sunrise = w.get_sunrise_time('iso')
-      current = w.get_detailed_status() 
+      current = w.get_detailed_status()
 
       lcd_string("Out temp:  %s" % timeshort,LCD_LINE_1)
       lcd_string("%s celsius" % ctemp,LCD_LINE_2)
@@ -142,7 +145,7 @@ def main():
     except Exception as ex:
       template = "An exception of type {0} occured. Arguments:\n{1!r}"
       message = template.format(type(ex).__name__, ex.args)
-      print message 
+      print message
       lcd_string("ERROR! Unable",LCD_LINE_1)
       lcd_string("to get weather",LCD_LINE_2)
       time.sleep(5)
