@@ -59,19 +59,19 @@ logger.setLevel(logging.INFO)
 
 #Reed switch interupt
 def dooropen(channel):
-    timenow = time.strftime('%H:%M:%S')
-    print "%s Door opened" % timenow
-    if pushbulletenable == 1:
-        subprocess.call("./pushbullet 'Door' 'opened @ %s'" % timenow, shell=True)
-    if cameraenable == 1:
-      time.sleep(3)
-      camera.capture('camera_captures/door-open-%s.jpg' % timenow)
-      print "Image captured door-open-%s.jpg" % timenow
-    logger.info('Door opened')
+  timenow = time.strftime('%H:%M:%S')
+  print "%s Door opened" % timenow
+  if pushbulletenable == 1:
+    subprocess.call("./pushbullet 'Door' 'opened @ %s'" % timenow, shell=True)
+  if cameraenable == 1:
+    time.sleep(3)
+    camera.capture('camera_captures/door-open-%s.jpg' % timenow)
+    print "Image captured door-open-%s.jpg" % timenow
+  logger.info('Door opened')
 
 # Main program block
 def main():
-    GPIO.setwarnings(False)
+  GPIO.setwarnings(False)
   GPIO.setmode(GPIO.BCM)       # Use BCM GPIO numbers
   GPIO.setup(LCD_E, GPIO.OUT)  # E
   GPIO.setup(LCD_RS, GPIO.OUT) # RS
@@ -96,7 +96,7 @@ def main():
   timenow = time.strftime('%H:%M')
   print("Time is now %s" % timenow)
   print("RSS feed: %s" % rssurl)
-    if pushbulletenable == 1:
+  if pushbulletenable == 1:
     print('Pushbullet notifications: Enabled')
   else:
     print('Pushbullet notifications: Disabled')
