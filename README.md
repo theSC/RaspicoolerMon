@@ -55,5 +55,11 @@ This project is being created to monitor coolers remotely in professional kitche
 ```
 Reed switch: Pin 17 (Pulled up)
 ```
+###NRF24L01 wiring###
 
 ##Arduino wiring:##
+###DHT@@ wiring###
+###Piezo wiring###
+###LED wiring###
+###NRF24L01 wiring###
+
