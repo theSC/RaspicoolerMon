@@ -14,9 +14,16 @@ This project is being created to monitor coolers remotely in professional kitche
 - Pushbullet notifications (WIP)
 - Live website HUD (WIP)
 
+##Requirements:##
+- curl 7.38
+- Python 2.7 and packages:
+  - pyowm
+  - feedparser
+
 ##Setup:##
 - Create directory for log.  Make sure it is writable by the user that will run RaspicoolerMon.
 - Open raspicoolermon.py in your favorite text editor and change the directory for the coolermon.log and RSS feed
+- Open pushbullet in your favorite text editor and copy your pushbullet API into API="YOUR API HERE"
 
 ##Raspberry Pi Wiring:##
 ###LCD###
