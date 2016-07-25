@@ -8,6 +8,7 @@ This project is being created to monitor coolers remotely in professional kitche
   - RSS feed display (Feed title and top three headlines)
   - Cooler tempuratures and humidty using DHT22s (WIP)
   - Kitchen tempurature and humidty using DHT22s (WIP)
+- Camera capture upon door open using Raspberry Pi camera module
 - Wireless communication between Arduinos and Raspberry Pi using NRF24L01s (WIP)
 - .csv logging (WIP)
 - MySQL logging (WIP)
@@ -21,6 +22,7 @@ This project is being created to monitor coolers remotely in professional kitche
   - [feedparser](https://github.com/kurtmckee/feedparser)
 
 ##Setup:##
+- Create directory for camera captures. Make sure it is writable by the user that will run RaspicoolerMon.
 - Create directory for log.  Make sure it is writable by the user that will run RaspicoolerMon.
 - Open **raspicoolermon.py** in your favorite text editor and change:
   - directory for the coolermon.log 
