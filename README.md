@@ -27,6 +27,9 @@ This project is being created to monitor coolers remotely in professional kitche
   - OWM API
   - OWM location
 - Open **pushbullet** in your favorite text editor and copy your pushbullet API into API="YOUR API HERE"
+- From insode RaspicoolerMon directory run:  
+  - `sudo chmod +x pushbullet`
+  - `sudo chmod +x raspicoolermon.py`
 
 ##Raspberry Pi Wiring:##
 ###LCD###
@@ -59,4 +62,6 @@ Reed switch: Pin 17 (Pulled up)
 ###Piezo wiring###
 ###LED wiring###
 ###NRF24L01 wiring###
+
+##Known bugs##
 
