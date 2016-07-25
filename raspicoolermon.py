@@ -18,7 +18,9 @@ owmapi = 'YOUR OWM API KEY HERE'
 location = 'YOUR LOCATION HERE ex Vancouver, BC'
 screen_delay = 5 # Time between screens in seconds
 pushbulletenable = 1 # 1 for enabled 0 for disabled
-cameraenable = 0 # 1 for enabled 0 for disabled
+cameraenable = 1 # 1 for enabled 0 for disabled
+rssenable = 1 # 1 for enabled 0 for disabled
+weatherenable = 1 # 1 for enabled 0 for disabled
 #END OF USER SETTINGS
 #####################
 
