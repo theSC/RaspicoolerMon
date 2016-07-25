@@ -16,6 +16,13 @@ This project is being created to monitor coolers remotely in professional kitche
 - Live website HUD (WIP)
 
 ##Requirements:##
+- A [RaspberryPi](https://www.amazon.ca/Raspberry-Pi-RASP-PI-3-Model-Board/dp/B01CD5VC92/ref=sr_1_2?ie=UTF8&qid=1469435657&sr=8-2&keywords=raspberry+pi+3)
+- [Arduino Nanos](https://www.amazon.ca/gp/product/B00761NDHI/ref=oh_aui_detailpage_o04_s00?ie=UTF8&psc=1)
+- A [16x2 LCD](https://www.amazon.ca/CARCHET-Character-Display-Module-Blacklight/dp/B00CJ8RXR4/ref=sr_1_1?ie=UTF8&qid=1469435416&sr=8-1&keywords=16x2+lcd) 
+- [Reed switches](https://www.amazon.ca/gp/product/B00OK67B4I/ref=oh_aui_detailpage_o07_s00?ie=UTF8&psc=1)
+- [nRF24L01+s](https://www.amazon.ca/gp/product/B01C3YNGI8/ref=oh_aui_detailpage_o08_s00?ie=UTF8&psc=1)
+- [Raspberry Pi Camera module](https://www.amazon.ca/gp/product/B00FGKYHXA/ref=oh_aui_detailpage_o04_s00?ie=UTF8&psc=1)
+- [DHT22s](https://www.amazon.ca/gp/product/B00XDSOZ2K/ref=oh_aui_detailpage_o01_s00?ie=UTF8&psc=1)
 - curl 7.38
 - Python 2.7 and packages:
   - [PyOWM](https://github.com/csparpa/pyowm)
