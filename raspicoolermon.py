@@ -17,6 +17,8 @@ rssurl = 'YOUR RSS FEED HERE'
 owmapi = 'YOUR OWM API KEY HERE'
 location = 'YOUR LOCATION HERE ex Vancouver, BC'
 screen_delay = 5 # Time between screens in seconds
+pushbulletenable = 1 # 1 for enabled 0 for disabled
+cameraenable = 0 # 1 for enabled 0 for disabled
 #END OF USER SETTINGS
 #####################
 
@@ -59,12 +61,14 @@ logger.setLevel(logging.INFO)
 def dooropen(channel):
     timenow = time.strftime('%H:%M:%S')
     print "%s Door opened" % timenow
-    subprocess.call("./pushbullet 'Door' 'opened @ %s'" % timenow, shell=True)
-    time.sleep(3)
-    camera.capture('camera_captures/door-open-%s.jpg' % timenow)
-    print "Image captured door-open-%s.jpg" % timenow
+    if pushbulletenable == 1:
+        subprocess.call("./pushbullet 'Door' 'opened @ %s'" % timenow, shell=True)
+    if cameraenable == 1:
+      time.sleep(3)
+      camera.capture('camera_captures/door-open-%s.jpg' % timenow)
+      print "Image captured door-open-%s.jpg" % timenow
     logger.info('Door opened')
-    
+
 # Main program block
 def main():
     GPIO.setwarnings(False)
@@ -80,8 +84,8 @@ def main():
   
   # Initialise display
   lcd_init()
-  lcd_string("Hello!",LCD_LINE_1)
-  lcd_string("Setting up...",LCD_LINE_2)
+  lcd_string("Welcome to ",LCD_LINE_1)
+  lcd_string("RaspicoolerMon",LCD_LINE_2)
   print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
   print("~~       RaspicoolerMon        ~~")
   print("~~       --------------        ~~")
@@ -92,7 +96,15 @@ def main():
   timenow = time.strftime('%H:%M')
   print("Time is now %s" % timenow)
   print("RSS feed: %s" % rssurl)
-  logger.info('Coolermon starting up...')
+    if pushbulletenable == 1:
+    print('Pushbullet notifications: Enabled')
+  else:
+    print('Pushbullet notifications: Disabled')
+  if cameraenable == 1:
+    print('Camera capture: Enabled')
+  else:
+    print('Camera capture: Disabled')
+  logger.info('RaspicoolerMon starting up...')
   logger.info('IP = %s'% ip)
   time.sleep(5)
   currenttime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
