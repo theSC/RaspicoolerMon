@@ -58,7 +58,7 @@ Reed switch: Pin 17 (Pulled up)
 ###NRF24L01 wiring###
 
 ##Arduino wiring:##
-###DHT@@ wiring###
+###DHT22 wiring###
 ###Piezo wiring###
 ###LED wiring###
 ###NRF24L01 wiring###
