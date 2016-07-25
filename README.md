@@ -3,9 +3,9 @@
 This project is being created to monitor coolers remotely in professional kitches using Arduino Minis and a Rasberry Pi.
 
 ##Features:##
-- Wireless communication between Arduinos and Raspberry Pi using NRF24L01s (WIP)
 - Outside weather
 - RSS feed display (Feed title and top three headlines)
+- Wireless communication between Arduinos and Raspberry Pi using NRF24L01s (WIP)
 - Cooler tempuratures and humidty using DHT22s (WIP)
 - Kitchen tempuarte and humidty using DHT22s (WIP)
 - .csv logging (WIP)
