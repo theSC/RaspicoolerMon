@@ -19,7 +19,7 @@ This project is being created to monitor coolers remotely in professional kitche
 - curl 7.38
 - Python 2.7 and packages:
   - [PyOWM](https://github.com/csparpa/pyowm)
-  - [feedparser](https://github.com/kurtmckee/feedparser)
+  - [feedparser](http://www.pythonforbeginners.com/feedparser/using-feedparser-in-python)
 
 ##Setup:##
 - Open **raspicoolermon.py** in your favorite text editor and change:
