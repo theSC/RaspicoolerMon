@@ -33,6 +33,8 @@ This project is being created to monitor coolers remotely in professional kitche
   - RSS feed
   - OWM API
   - OWM location
+  - Enable(1)/disable(0) pushbullet notifications
+  - Enable(1)/disable(0) camera capture
 - Open **pushbullet** in your favorite text editor and copy your pushbullet API into API="YOUR API HERE"
 - From insode RaspicoolerMon directory run:  
   - `sudo chmod +x pushbullet`
