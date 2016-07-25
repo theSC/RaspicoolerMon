@@ -11,7 +11,7 @@ This project is being created to monitor coolers remotely in professional kitche
 - Wireless communication between Arduinos and Raspberry Pi using NRF24L01s (WIP)
 - .csv logging (WIP)
 - MySQL logging (WIP)
-- Pushbullet notifications (WIP)
+- Pushbullet notifications (You will need a [Pushbullet API key](https://www.pushbullet.com/)(WIP)
 - Live website HUD (WIP)
 
 ##Requirements:##
@@ -22,12 +22,12 @@ This project is being created to monitor coolers remotely in professional kitche
 
 ##Setup:##
 - Create directory for log.  Make sure it is writable by the user that will run RaspicoolerMon.
-- Open raspicoolermon.py in your favorite text editor and change:
+- Open **raspicoolermon.py** in your favorite text editor and change:
   - directory for the coolermon.log 
   - RSS feed
   - OWM API
   - OWM location
-- Open pushbullet in your favorite text editor and copy your pushbullet API into API="YOUR API HERE"
+- Open **pushbullet** in your favorite text editor and copy your pushbullet API into API="YOUR API HERE"
 
 ##Raspberry Pi Wiring:##
 ###LCD###
