@@ -4,7 +4,7 @@ This project is being created to monitor coolers remotely in professional kitche
 
 ##Features:##
 - 16x2 LCD Display on Raspberry Pi diplays: 
-  - Outside weather
+  - Outside weather (Using [PyOWM](https://github.com/csparpa/pyowm). You will need an [OWM](http://openweathermap.org/api) API key)
   - RSS feed display (Feed title and top three headlines)
   - Cooler tempuratures and humidty using DHT22s (WIP)
   - Kitchen tempurature and humidty using DHT22s (WIP)
@@ -17,12 +17,16 @@ This project is being created to monitor coolers remotely in professional kitche
 ##Requirements:##
 - curl 7.38
 - Python 2.7 and packages:
-  - pyowm
-  - feedparser
+  - [PyOWM](https://github.com/csparpa/pyowm)
+  - [feedparser](https://github.com/kurtmckee/feedparser)
 
 ##Setup:##
 - Create directory for log.  Make sure it is writable by the user that will run RaspicoolerMon.
-- Open raspicoolermon.py in your favorite text editor and change the directory for the coolermon.log and RSS feed
+- Open raspicoolermon.py in your favorite text editor and change:
+  - directory for the coolermon.log 
+  - RSS feed
+  - OWM API
+  - OWM location
 - Open pushbullet in your favorite text editor and copy your pushbullet API into API="YOUR API HERE"
 
 ##Raspberry Pi Wiring:##
