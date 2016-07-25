@@ -61,7 +61,7 @@ screen_delay = 5
 
 rssurl = 'YOUR RSS FEED HERE'
 logger = logging.getLogger('raspicoolermon')
-hdlr = logging.FileHandler('/PATH/TO/LOG/DIRECTOY/raspicoolermon.log')
+hdlr = logging.FileHandler('logs/raspicoolermon.log')
 formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 hdlr.setFormatter(formatter)
 logger.addHandler(hdlr) 
@@ -73,7 +73,7 @@ def frontdooropen(channel):
     print "%s Door opened" % timenow
     subprocess.call("./pushbullet 'Door' 'opened @ %s'" % timenow, shell=True)
     time.sleep(3)
-    camera.capture('/PATH/TO/PICTURE/DIRECTORY/door-open-%s.jpg' % timenow)
+    camera.capture('camera_captures/door-open-%s.jpg' % timenow)
     print "Image captured door-open-%s.jpg" % timenow
     logger.info('Door opened')
 
