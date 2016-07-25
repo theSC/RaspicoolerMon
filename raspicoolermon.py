@@ -11,7 +11,19 @@ import feedparser
 import subprocess
 from picamera import PiCamera
 
+#####################
+#BEGIN USER SETTINGS
+rssurl = 'YOUR RSS FEED HERE'
+owmapi = 'YOUR OWM API KEY HERE'
+location = 'YOUR LOCATION HERE ex Vancouver, BC'
+screen_delay = 5 # Time between screens in seconds
+#END OF USER SETTINGS
+#####################
+
+# Define camera
 camera = PiCamera()
+
+# Define reed switch
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     
@@ -22,7 +34,6 @@ LCD_D4 = 25
 LCD_D5 = 24
 LCD_D6 = 23
 LCD_D7 = 18
-
 
 # Define some device constants
 LCD_WIDTH = 16    # Maximum characters per line
@@ -36,12 +47,7 @@ LCD_LINE_2 = 0xC0 # LCD RAM address for the 2nd line
 E_PULSE = 0.0005
 E_DELAY = 0.0005
 
-screen_delay = 5
-
-rssurl = 'YOUR RSS FEED HERE'
-owmapi = 'YOUR OWM API KEY HERE'
-location = 'YOUR LOCATION HERE ex Vancouver, BC'
-
+#Logger setup
 logger = logging.getLogger('raspicoolermon')
 hdlr = logging.FileHandler('logs/raspicoolermon.log')
 formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
@@ -49,7 +55,7 @@ hdlr.setFormatter(formatter)
 logger.addHandler(hdlr) 
 logger.setLevel(logging.INFO)
 
-
+#Reed switch interupt
 def dooropen(channel):
     timenow = time.strftime('%H:%M:%S')
     print "%s Door opened" % timenow
@@ -58,11 +64,10 @@ def dooropen(channel):
     camera.capture('camera_captures/door-open-%s.jpg' % timenow)
     print "Image captured door-open-%s.jpg" % timenow
     logger.info('Door opened')
-
+    
+# Main program block
 def main():
-  # Main program block
-  
-  GPIO.setwarnings(False)
+    GPIO.setwarnings(False)
   GPIO.setmode(GPIO.BCM)       # Use BCM GPIO numbers
   GPIO.setup(LCD_E, GPIO.OUT)  # E
   GPIO.setup(LCD_RS, GPIO.OUT) # RS
@@ -73,7 +78,7 @@ def main():
 
   ip = ni.ifaddresses('wlan0')[2][0]['addr']
   
-    # Initialise display
+  # Initialise display
   lcd_init()
   lcd_string("Hello!",LCD_LINE_1)
   lcd_string("Setting up...",LCD_LINE_2)
@@ -89,7 +94,7 @@ def main():
   print("RSS feed: %s" % rssurl)
   logger.info('Coolermon starting up...')
   logger.info('IP = %s'% ip)
-  time.sleep(5) # 3 second delay
+  time.sleep(5)
   currenttime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
   lcd_string("%s" % currenttime,LCD_LINE_1)
   lcd_string("%s" % ip,LCD_LINE_2)
@@ -241,10 +246,6 @@ def lcd_toggle_enable():
 
 def lcd_string(message,line):
   # Send string to display
-
-
-
-
   message = message.ljust(LCD_WIDTH," ")
 
   lcd_byte(line, LCD_CMD)
