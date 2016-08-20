@@ -1,6 +1,6 @@
 # RaspicoolerMon
 
-This project is being created to monitor coolers remotely in professional kitches using Arduino Minis and a Rasberry Pi.
+This project is being created to monitor coolers remotely in professional kitchens using Arduino Minis and a Rasberry Pi.
 
 ##Features:##
 - 16x2 LCD Display on Raspberry Pi diplays: 
