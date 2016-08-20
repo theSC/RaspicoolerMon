@@ -3,7 +3,7 @@
 This project is being created to monitor coolers remotely in professional kitchens using Arduino Minis and a Rasberry Pi.
 
 ##Features:##
-- 16x2 LCD Display on Raspberry Pi diplays: 
+- 16x2 LCD Display on Raspberry Pi: 
   - Outside weather (Using [PyOWM](https://github.com/csparpa/pyowm). You will need an [OWM](http://openweathermap.org/api) API key)
   - RSS feed display (Feed title and top three headlines)
   - Cooler tempuratures and humidty using DHT22s (WIP)
