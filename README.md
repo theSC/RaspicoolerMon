@@ -7,11 +7,11 @@ This project is being created to monitor coolers remotely in professional kitche
   - Outside weather (Using [PyOWM](https://github.com/csparpa/pyowm). You will need an [OWM](http://openweathermap.org/api) API key)
   - RSS feed display (Feed title and top three headlines)
   - Cooler tempuratures and humidty using DHT22s (WIP)
-  - Kitchen tempurature and humidty using DHT22s (WIP)
+  - Kitchen tempurature and humidty using DHT22s
 - Camera capture upon door open using Raspberry Pi camera module
 - Wireless communication between Arduinos and Raspberry Pi using NRF24L01s (WIP)
-- .csv logging (WIP)
-- MySQL logging (WIP)
+- .csv logging
+- MySQL logging
 - Pushbullet notifications (You will need a [Pushbullet API key](https://www.pushbullet.com/)(WIP)
 - Live website HUD (WIP)
 
