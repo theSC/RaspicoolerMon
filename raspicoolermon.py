@@ -24,10 +24,9 @@ pushbulletenable = 1 # 1 for enabled 0 for disabled
 cameraenable = 1 # 1 for enabled 0 for disabled
 rssenable = 1 # 1 for enabled 0 for disabled
 logtimer = 60*5 # Time between temp & humidity logging in seconds
-#MYSQL VARS ARE NOT WORKING YET
-#mysqladdr = 'ENTER MYSQL ADDRESS HERE' # ex localhost
-#mysqluser = 'ENTER MYSQL USERNAME HERE'
-#mysqlpass = 'ENTER MYSQL USER PASSWORD HERE'
+mysqladdr = 'ENTER MYSQL ADDRESS HERE' # ex localhost
+mysqluser = 'ENTER MYSQL USERNAME HERE'
+mysqlpass = 'ENTER MYSQL USER PASSWORD HERE'
 #END OF USER SETTINGS
 #####################
 
@@ -87,7 +86,7 @@ def datalogger():
       logintemp='{0:0.1f}'.format(temperature)
       loginhumidity='{0:0.1f}'.format(humidity)
 #log to MySQL
-      con = mdb.connect('ENTER MYSQL ADDRESS HERE', 'ENTER MYSQL USERNAME HERE', 'ENTER MSQL USER PASSWORD HERE', 'tempserver');
+      con = mdb.connect(mysqladdr,mysqluser,mysqlpass,'tempserver');
     with con:
       cur = con.cursor()
       cur.execute("INSERT INTO intemptinhumidity(time,intemp,inhumidity) VALUES(%s,%s,%s)", (currenttime,logintemp,loginhumidity))
@@ -150,7 +149,7 @@ def main():
     print('Camera capture: Disabled')
 
   try:
-    con = mdb.connect('ENTER MYSQL ADDRESS HERE', 'ENTER MYSQL USERNAME HERE', 'ENTER MSQL USER PASSWORD HERE', 'tempserver');
+    con = mdb.connect(mysqladdr,mysqluser,mysqlpass,'tempserver');
     cur = con.cursor()
     cur.execute("SELECT VERSION()")
     ver = cur.fetchone()
