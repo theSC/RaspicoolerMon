@@ -101,9 +101,9 @@ def datalogger():
   csvlog.write('%s,%s,%s\n' % (currenttime,logintemp, loginhumidity))
   csvlog.close()
   print('{0}: Temp={1:0.1f}c  Humidity={2:0.1f}%'.format(currenttime,temperature, humidity))
-  csvthread = threading.Timer(logtimer, datalogger)
-  csvthread.daemon = True
-  csvthread.start()
+  logthread = threading.Timer(logtimer, datalogger)
+  logthread.daemon = True
+  logthread.start()
 
 # Main program block
 def main():
