@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 import RPi.GPIO as GPIO
 import time
@@ -9,18 +9,25 @@ import re
 import logging
 import feedparser
 import subprocess
+import threading
+import Adafruit_DHT
+import MySQLdb as mdb
 from picamera import PiCamera
 
 #####################
 #BEGIN USER SETTINGS
-rssurl = 'YOUR RSS FEED HERE'
-owmapi = 'YOUR OWM API KEY HERE'
-location = 'YOUR LOCATION HERE ex Vancouver, BC'
+rssurl = 'ENTER RSS URL HERE' # ex https://www.reddit.com/r/worldnews/.rss
+owmapi = 'ENTER OWM API KEY HERE'
+location = 'ENTER LOCATION HERE' # ex Vancouver, BC
 screen_delay = 5 # Time between screens in seconds
 pushbulletenable = 1 # 1 for enabled 0 for disabled
 cameraenable = 1 # 1 for enabled 0 for disabled
 rssenable = 1 # 1 for enabled 0 for disabled
-weatherenable = 1 # 1 for enabled 0 for disabled
+logtimer = 60*5 # Time between temp & humidity logging in seconds
+#MYSQL VARS ARE NOT WORKING YET
+#mysqladdr = 'ENTER MYSQL ADDRESS HERE' # ex localhost
+#mysqluser = 'ENTER MYSQL USERNAME HERE'
+#mysqlpass = 'ENTER MYSQL USER PASSWORD HERE'
 #END OF USER SETTINGS
 #####################
 
@@ -30,7 +37,7 @@ camera = PiCamera()
 # Define reed switch
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    
+
 # Define GPIO to LCD mapping
 LCD_RS = 7
 LCD_E  = 8
@@ -56,7 +63,7 @@ logger = logging.getLogger('raspicoolermon')
 hdlr = logging.FileHandler('logs/raspicoolermon.log')
 formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 hdlr.setFormatter(formatter)
-logger.addHandler(hdlr) 
+logger.addHandler(hdlr)
 logger.setLevel(logging.INFO)
 
 #Reed switch interupt
@@ -71,6 +78,33 @@ def dooropen(channel):
     print "Image captured door-open-%s.jpg" % timenow
   logger.info('Door opened')
 
+#data logging thread
+def datalogger():
+  try:
+    humidity, temperature = Adafruit_DHT.read_retry(22, 26)
+    currenttime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    if humidity is not None and temperature is not None:
+      logintemp='{0:0.1f}'.format(temperature)
+      loginhumidity='{0:0.1f}'.format(humidity)
+#log to MySQL
+      con = mdb.connect('ENTER MYSQL ADDRESS HERE', 'ENTER MYSQL USERNAME HERE', 'ENTER MSQL USER PASSWORD HERE', 'tempserver');
+    with con:
+      cur = con.cursor()
+      cur.execute("INSERT INTO intemptinhumidity(time,intemp,inhumidity) VALUES(%s,%s,%s)", (currenttime,logintemp,loginhumidity))
+  except mdb.Error, e:
+    print "Error %d: %s" % (e.args[0],e.args[1])
+  finally:
+    if con:
+      con.close
+#log to .csv
+  csvlog = open('intempinhumidity.csv', 'a')
+  csvlog.write('%s,%s,%s\n' % (currenttime,logintemp, loginhumidity))
+  csvlog.close()
+  print('{0}: Temp={1:0.1f}c  Humidity={2:0.1f}%'.format(currenttime,temperature, humidity))
+  csvthread = threading.Timer(logtimer, datalogger)
+  csvthread.daemon = True
+  csvthread.start()
+
 # Main program block
 def main():
   GPIO.setwarnings(False)
@@ -83,7 +117,7 @@ def main():
   GPIO.setup(LCD_D7, GPIO.OUT) # DB7
 
   ip = ni.ifaddresses('wlan0')[2][0]['addr']
-  
+
   # Initialise display
   lcd_init()
   lcd_string("Welcome to ",LCD_LINE_1)
@@ -98,14 +132,35 @@ def main():
   timenow = time.strftime('%H:%M')
   print("Time is now %s" % timenow)
   print("RSS feed: %s" % rssurl)
+  humidity, temperature = Adafruit_DHT.read_retry(22, 26)
+  if humidity is not None and temperature is not None:
+    print('DHT22 sensor: Temp={0:0.1f}c  Humidity={1:0.1f}%'.format(temperature, humidity))
+  subprocess.call("./pushbullet 'RaspicoolerMon' 'up and running @ %s'" % timenow, shell=True)
   if pushbulletenable == 1:
     print('Pushbullet notifications: Enabled')
   else:
     print('Pushbullet notifications: Disabled')
+  if rssenable == 1:
+    print('RSS feedreader: Enabled')
+  else:
+    print('RSS feedreader: Disabled')
   if cameraenable == 1:
     print('Camera capture: Enabled')
   else:
     print('Camera capture: Disabled')
+
+  try:
+    con = mdb.connect('ENTER MYSQL ADDRESS HERE', 'ENTER MYSQL USERNAME HERE', 'ENTER MSQL USER PASSWORD HERE', 'tempserver');
+    cur = con.cursor()
+    cur.execute("SELECT VERSION()")
+    ver = cur.fetchone()
+    print "MySQL: Reachable\nDatabase version : %s " % ver
+  except mdb.Error, e:
+    print "Error %d: %s" % (e.args[0],e.args[1])
+  finally:
+    if con:
+        con.close()
+
   logger.info('RaspicoolerMon starting up...')
   logger.info('IP = %s'% ip)
   time.sleep(5)
@@ -115,8 +170,23 @@ def main():
   time.sleep(5)
   print("Entering main loop")
   print("Press: Ctrl+C to exit...")
+  print("-------------------------------------------------")
   GPIO.add_event_detect(17, GPIO.FALLING, callback=dooropen)
+  datalogger()
   while True:
+    currenttime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    humidity, temperature = Adafruit_DHT.read_retry(22, 26)
+    if humidity is not None and temperature is not None:
+      intemp='{0:0.1f}'.format(temperature)
+      inhumidity='{0:0.1f}'.format(humidity)
+      lcd_string("In temp:   %sc" % intemp,LCD_LINE_1)
+      lcd_string("Humidty:   %s%%" % inhumidity,LCD_LINE_2)
+
+      time.sleep(screen_delay)
+
+    else:
+      print('Failed to read DHT22')
+
     try:
       timeshort = time.strftime('%H:%M')
       currenttime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -127,7 +197,7 @@ def main():
       ctemp = re.search(r"(?<='temp': ).*?(?=, 'temp_min)", '%s' % ct).group(0)
       sunset = w.get_sunset_time('iso')
       sunrise = w.get_sunrise_time('iso')
-      current = w.get_detailed_status() 
+      current = w.get_detailed_status()
 
       lcd_string("Out temp:  %s" % timeshort,LCD_LINE_1)
       lcd_string("%s celsius" % ctemp,LCD_LINE_2)
@@ -142,7 +212,7 @@ def main():
     except Exception as ex:
       template = "An exception of type {0} occured. Arguments:\n{1!r}"
       message = template.format(type(ex).__name__, ex.args)
-      print message 
+      print message
       lcd_string("ERROR! Unable",LCD_LINE_1)
       lcd_string("to get weather",LCD_LINE_2)
       time.sleep(5)
@@ -153,50 +223,51 @@ def main():
       lcd_string("%s" % currenttime,LCD_LINE_2)
 
       time.sleep(screen_delay)
-      try:
-        str_pad = " " * 16
-        feed = feedparser.parse(rssurl)
-        feed_title = feed['feed']['title']
-        entry1 = feed['entries'][0]['title']
-        entry1_long_string = entry1
-        entry1_long_string = str_pad + entry1_long_string
-        timeshort = time.strftime('%H:%M')
-        lcd_string("%s:%s" % (feed_title, timeshort), LCD_LINE_1)
-        for i in range (0, len(entry1_long_string)):
-         lcd_byte(LCD_LINE_2, LCD_CMD)
-         lcd_text = entry1_long_string[i:(i+15)]
-         lcd_string(lcd_text,LCD_LINE_2)
-         time.sleep(0.2)
+      if rssenable == 1:
+          try:
+            str_pad = " " * 16
+            feed = feedparser.parse(rssurl)
+            feed_title = feed['feed']['title']
+            entry1 = feed['entries'][0]['title']
+            entry1_long_string = entry1
+            entry1_long_string = str_pad + entry1_long_string
+            timeshort = time.strftime('%H:%M')
+            lcd_string("%s:%s" % (feed_title, timeshort), LCD_LINE_1)
+            for i in range (0, len(entry1_long_string)):
+             lcd_byte(LCD_LINE_2, LCD_CMD)
+             lcd_text = entry1_long_string[i:(i+15)]
+             lcd_string(lcd_text,LCD_LINE_2)
+             time.sleep(0.2)
 
-        entry2 = feed['entries'][1]['title']
-        entry2_long_string = entry2
-        entry2_long_string = str_pad + entry2_long_string
-        for i in range (0, len(entry2_long_string)):
-         lcd_byte(LCD_LINE_1, LCD_CMD)
-         lcd_text = entry2_long_string[i:(i+15)]
-         lcd_string(lcd_text,LCD_LINE_2)
-         time.sleep(0.2)
+            entry2 = feed['entries'][1]['title']
+            entry2_long_string = entry2
+            entry2_long_string = str_pad + entry2_long_string
+            for i in range (0, len(entry2_long_string)):
+             lcd_byte(LCD_LINE_1, LCD_CMD)
+             lcd_text = entry2_long_string[i:(i+15)]
+             lcd_string(lcd_text,LCD_LINE_2)
+             time.sleep(0.2)
 
-        entry3 = feed['entries'][2]['title']
-        entry3_long_string = entry3
-        entry3_long_string = str_pad + entry3_long_string
-        for i in range (0, len(entry3_long_string)):
-         lcd_byte(LCD_LINE_1, LCD_CMD)
-         lcd_text = entry3_long_string[i:(i+15)]
-         lcd_string(lcd_text,LCD_LINE_2)
-         time.sleep(0.2)
+            entry3 = feed['entries'][2]['title']
+            entry3_long_string = entry3
+            entry3_long_string = str_pad + entry3_long_string
+            for i in range (0, len(entry3_long_string)):
+             lcd_byte(LCD_LINE_1, LCD_CMD)
+             lcd_text = entry3_long_string[i:(i+15)]
+             lcd_string(lcd_text,LCD_LINE_2)
+             time.sleep(0.2)
 
-      except Exception as ex:
-        template = "An exception of type {0} occured. Arguments:\n{1!r}"
-        message = template.format(type(ex).__name__, ex.args)
-        print message
-        lcd_string("ERROR! Unable",LCD_LINE_1)
-        lcd_string("to get RSS",LCD_LINE_2)
-        time.sleep(5)
-        logger.exception('Unable to get RSS feed - %s' % message)
-        print("ERROR! Unable to get RSS feed")
-      finally:
-        time.sleep(1)
+          except Exception as ex:
+            template = "An exception of type {0} occured. Arguments:\n{1!r}"
+            message = template.format(type(ex).__name__, ex.args)
+            print message
+            lcd_string("ERROR! Unable",LCD_LINE_1)
+            lcd_string("to get RSS",LCD_LINE_2)
+            time.sleep(5)
+            logger.exception('Unable to get RSS feed - %s' % message)
+            print("ERROR! Unable to get RSS feed")
+          finally:
+            time.sleep(1)
 
 def lcd_init():
   # Initialise display
