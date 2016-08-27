@@ -27,6 +27,7 @@ logtimer = 60*5 # Time between temp & humidity logging in seconds
 mysqladdr = 'ENTER MYSQL ADDRESS HERE' # ex localhost
 mysqluser = 'ENTER MYSQL USERNAME HERE'
 mysqlpass = 'ENTER MYSQL USER PASSWORD HERE'
+kittempthresh = 30 # Kitchen temperature notification threshhold in celcius
 #END OF USER SETTINGS
 #####################
 
@@ -184,7 +185,7 @@ def main():
       lcd_string("Humidty:   %s%%" % inhumidity,LCD_LINE_2)
 
 #Send Pushbullet notification if kitchen is above 30c
-      if temperature > 30:
+      if temperature > kittempthresh:
         subprocess.call("./pushbullet 'RaspicoolerMon' 'Temp in kitchen is %sc'" % intemp, shell=True)
 
       time.sleep(screen_delay)
