@@ -79,6 +79,7 @@ def dooropen(channel):
 
 #data logging thread
 def datalogger():
+  con = None
   try:
     humidity, temperature = Adafruit_DHT.read_retry(22, 26)
     currenttime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -86,7 +87,7 @@ def datalogger():
       logintemp='{0:0.1f}'.format(temperature)
       loginhumidity='{0:0.1f}'.format(humidity)
 #log to MySQL
-      con = mdb.connect(mysqladdr,mysqluser,mysqlpass,'tempserver');
+      con = mdb.connect(mysqladdr,mysqluser,mysqlpass, 'tempserver');
     with con:
       cur = con.cursor()
       cur.execute("INSERT INTO intemptinhumidity(time,intemp,inhumidity) VALUES(%s,%s,%s)", (currenttime,logintemp,loginhumidity))
@@ -148,8 +149,9 @@ def main():
   else:
     print('Camera capture: Disabled')
 
+  con = None
   try:
-    con = mdb.connect(mysqladdr,mysqluser,mysqlpass,'tempserver');
+    con = mdb.connect(mysqladdr,mysqluser,mysqlpass, 'tempserver');
     cur = con.cursor()
     cur.execute("SELECT VERSION()")
     ver = cur.fetchone()
@@ -158,7 +160,7 @@ def main():
     print "Error %d: %s" % (e.args[0],e.args[1])
   finally:
     if con:
-        con.close()
+      con.close()
 
   logger.info('RaspicoolerMon starting up...')
   logger.info('IP = %s'% ip)
