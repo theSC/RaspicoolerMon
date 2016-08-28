@@ -185,7 +185,7 @@ def main():
       lcd_string("Humidty:   %s%%" % inhumidity,LCD_LINE_2)
 
 #Send Pushbullet notification if kitchen is above 30c
-      if temperature > kittempthresh:
+      if temperature >= kittempthresh:
         subprocess.call("./pushbullet 'RaspicoolerMon' 'Temp in kitchen is %sc'" % intemp, shell=True)
 
       time.sleep(screen_delay)
