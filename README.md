@@ -45,7 +45,7 @@ This project is being created to monitor coolers remotely in professional kitche
 - From inside RaspicoolerMon directory run:  
   - `sudo chmod +x pushbullet`
   - `sudo chmod +x raspicoolermon.py`
--sudo ./raspicoolermon.py
+- sudo ./raspicoolermon.py
 ##Raspberry Pi Wiring:##
 ###LCD###
 ```
