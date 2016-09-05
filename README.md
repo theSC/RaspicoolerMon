@@ -13,7 +13,7 @@ This project is being created to monitor coolers remotely in professional kitche
 - .csv logging
 - MySQL logging
 - Pushbullet notifications (You will need a [Pushbullet API key](https://www.pushbullet.com/)(WIP)
-- Live website HUD (WIP)
+- Live website HUD
 
 ##Requirements:##
 - A [RaspberryPi](https://www.amazon.ca/Raspberry-Pi-RASP-PI-3-Model-Board/dp/B01CD5VC92/ref=sr_1_2?ie=UTF8&qid=1469435657&sr=8-2&keywords=raspberry+pi+3)
@@ -27,6 +27,9 @@ This project is being created to monitor coolers remotely in professional kitche
 - Python 2.7 and packages:
   - [PyOWM](https://github.com/csparpa/pyowm)
   - [feedparser](http://www.pythonforbeginners.com/feedparser/using-feedparser-in-python)
+  - Adafruit_DHT
+- Apache webserver
+- MySQL
 
 ##Setup:##
 - Open **raspicoolermon.py** in your favorite text editor and change:
@@ -35,11 +38,14 @@ This project is being created to monitor coolers remotely in professional kitche
   - OWM location
   - Enable(1)/disable(0) pushbullet notifications
   - Enable(1)/disable(0) camera capture
+  - mysqladdr
+  - mysqluser
+  - mysqlpass
 - Open **pushbullet** in your favorite text editor and copy your pushbullet API into API="YOUR API HERE"
-- From insode RaspicoolerMon directory run:  
+- From inside RaspicoolerMon directory run:  
   - `sudo chmod +x pushbullet`
   - `sudo chmod +x raspicoolermon.py`
-
+-sudo ./raspicoolermon.py
 ##Raspberry Pi Wiring:##
 ###LCD###
 ```
